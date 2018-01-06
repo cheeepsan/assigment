@@ -77,8 +77,9 @@ class SiteController extends Controller
 
     public function actionUpdateData() {
       
-      return $this->redirect(['update/index']);
+      return $this->redirect(['event/index']);
     }
+
     /**
      * Logs in a user.
      *

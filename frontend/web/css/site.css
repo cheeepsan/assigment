@@ -118,3 +118,68 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/** 
+BOOTSTRAP END
+**/
+
+div.sidebar > div.sidebar-inner {
+
+	padding: 20px 0px 0px 10px;
+}
+
+div.content > div.content-inner {
+	border-right: 1px solid #ccc;
+	padding-right:10px;
+	
+}
+table.list > thead > tr > th {
+	padding-bottom: 10px;
+
+}
+table.list > thead > tr > th.icon {
+	text-align: center;
+}
+table.list > thead > tr > th a{
+	color: #333;
+	
+}
+table.list {
+	min-width: 100%;
+}
+tr.filters > td {
+	padding-right: 10px;
+}
+tr.filters > td:last-child {
+	padding-right: 0px;
+}
+
+tbody > tr > td {
+	padding: 0px 10px;
+	border-bottom: 1px solid #ccc;
+}
+tbody > tr:nth-child(even) {
+	background-color:#ccc;
+}
+table.list td {
+	width: 33%; 
+	text-align: left;
+}
+.grid-view td {
+	white-space: normal !important;
+}
+div.grid-view {
+	
+	padding: 10px;
+}
+div.grid-view-wrapper {
+	/* border: 1px solid #ccc; */
+}
+ul.pagination li.active a{
+	background-color: #333;
+}
+ul.pagination li.active a:hover {
+	background-color: #444;
+}
+
+

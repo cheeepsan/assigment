@@ -15,10 +15,11 @@ use linslin\yii2\curl;
 /**
  * Site controller
  */
-class UpdateController extends Controller
+class EventController extends Controller
 {
 	
 	private $processed = 0;
+	private $totalRecords = 0;
     /**
      * @inheritdoc
      */
@@ -53,6 +54,7 @@ class UpdateController extends Controller
      */
     public function actionIndex()
     {
+
         // $events = Event::find()->all();
         return $this->render('index');
     }
@@ -61,10 +63,16 @@ class UpdateController extends Controller
     * Update and populate data from http://api.espoo.fi/linkedevents/v1/keyword/?format=json
     *
     */
-    public function actionUpdate() {
-        $link = "http://api.espoo.fi/linkedevents/v1/keyword/?format=json";
+    public function actionData() {
+		$this->update();
+		
+		return $this->redirect(['list']);
+    }
+	
+	private function update() {
+		$link = "http://api.espoo.fi/linkedevents/v1/keyword/?format=json";
         $curl = new curl\Curl();
-
+		
         $response = $curl->get($link);
 
         $json = Json::decode($response);
@@ -73,26 +81,37 @@ class UpdateController extends Controller
         $meta_next = $meta['next'];
 
         $data = $json['data'];
-        $i = 0;
+		
+		$this->totalRecords = $meta_amount;
+
+		
         while ($meta_next != null) {
 			$response = $curl->get($meta_next);
 
 			$json = Json::decode($response);
 			$meta = $json['meta'];
-			$meta_amount = $meta['count'];
+
 			$meta_next = $meta['next'];
 
 			$data = $json['data'];
 			
 			
 			foreach ($data as $event) {
-				$eventModel = new Event();
+	
+				$eventModel = null;
 				
-				$eventId = $event['id'];
-				$eventModel->id_event_full = $eventId;
+				$idEventFull = $event['id'];
 				$regexMatch = null;
-				preg_match('/(?<=\:).*$/', $eventId, $regexMatch);
-				$eventModel->id_event = (isset($regexMatch[0]) ? $regexMatch[0] : null); 
+				preg_match('/(?<=\:).*$/', $idEventFull, $regexMatch);
+				
+				$idEvent = (isset($regexMatch[0]) ? $regexMatch[0] : null); 
+				$eventModel = Event::find()->where(['id_event' => $idEvent])->one();
+				// var_dump($eventModel); die();
+				if ($eventModel == null) {
+					$eventModel = new Event();
+					$eventModel->id_event_full = $idEventFull;
+					$eventModel->id_event = $idEvent;
+				}
 				
 				
 				$formatter = \Yii::$app->formatter;
@@ -113,7 +132,6 @@ class UpdateController extends Controller
 					$eventModel->last_modified_time = null;
 				}
 				
-				
 				$eventModel->aggregate = $event['aggregate'];
 				$eventModel->data_source = $event['data_source'];
 				$eventModel->image = $event['image'];
@@ -129,11 +147,9 @@ class UpdateController extends Controller
 				$eventModel->link = $event['@id'];
 				$eventModel->context = $event['@context'];
 				$eventModel->type = $event['@type'];
-				// if ($this->processed % 10) {
-					// $this->actionStatus();
-				// }
+
 				if ($eventModel->save()){
-					
+
 				} else {
 					$this->processed = 0;
 					return $this->render(['import-error', 'errors' => $eventModel->errors, 'proc' => $processed]);
@@ -141,13 +157,14 @@ class UpdateController extends Controller
 
 
 				$this->processed++;
-		  }
+				// if ($this->processed % 10) {
+					// echo Json::encode(['output'=>'ete']);
+				// }
+			}
 			
         }
-		
-		return $this->redirect(['list']);
-    }
-	
+
+	}
 	public function actionList() {
 		$searchModel = new EventSearch();
         $queryParams = Yii::$app->request->queryParams;
@@ -157,9 +174,34 @@ class UpdateController extends Controller
         return $this->render('list', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
 	}
 	
-	public function actionStatus() {
+	public function actionUpdate($id) {
+		$model = Event::find()->where(['id' => $id])->one();
 		
-		return $this->render('index', ['proc' => $this->processed]);
+		if($model->load(Yii::$app->request->post()) && $model->validate()){
+			die();
+			if($model->save()) {
+				return $this->render('list');
+			} else {
+				var_dump($model->errors); die();
+				return $this->render('update',  ['model' => $model, 'errors' => $model->errors]);
+			}
+		}
+		
+		return $this->render('update', ['model' => $model, 'errors' => $model->errors]);
 	}
 
+	
+	public function actionStatus() {
+		// if (Yii::$app->request->isAjax) {
+			// $data = Yii::$app->request->post();
+			// $this->totalRecords = 644;
+			// var_dump($this->totalRecords);
+			// \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			// return [
+				// 'proc' => $this->processed,
+				// 'total' => $this->totalRecords,
+			// ];
+			// echo Json::encode(['proc'=>$this->processed, 'total'=> $this->totalRecords]);
+		// }
+	}
 }
