@@ -32,9 +32,18 @@ use yii\helpers\Html;
 						],
 						[
 
-						'format' => 'html',
-						   'value' => function ($model) {
-							   return Html::a('<span class="glyphicon glyphicon-remove-sign"></span>',  ['event/list'], ['class' => 'icon']);
+							'format' => 'raw',
+							'value' => function ($model) {
+							   $btn = Html::a('<span class="glyphicon glyphicon-remove-sign"></span>',  ['event/delete', 'id' => $model->id], 
+												[
+													'class' => 'icon',   										
+													'data' => [
+														'confirm' => "Are you sure you want to delete this record? ",
+														'method' => 'post',
+														
+													],
+												]);
+							   return Html::decode($btn);
 						   }
 						],
 					],
@@ -43,8 +52,6 @@ use yii\helpers\Html;
 		</div>
 	</div>
 	<div class="col-md-2 sidebar">
-		<div class="col-md-2 sidebar">
 				<?= Yii::$app->view->render('_sidebar'); ?>
-		</div>
 	</div>
 </div>

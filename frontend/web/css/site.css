@@ -182,4 +182,36 @@ ul.pagination li.active a:hover {
 	background-color: #444;
 }
 
+a.icon {
+	color: #101010;
+}
+ul.sidebar {
+	list-style-type: none;
+	float: left;
+	padding-left: 10px;
+}
+ul.sidebar > li {
+	padding-top: 10px;
+	border-bottom: 1px solid #101010;
+}
+ul.sidebar a {
+	color: #f441c4;
+}
+ul.sidebar a:hover{
+	color: #101010;
+	text-decoration: none;
+}
+div.buttons {
 
+	margin-top: 10px;
+
+}
+
+div.buttons p { 
+	float: left;
+	margin-right: 20px;
+}
+
+div.input-group.date {
+	padding-bottom: 20px;
+}

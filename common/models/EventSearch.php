@@ -59,17 +59,17 @@ class EventSearch extends Event {
             return $dataProvider;
         }
 
-        $dataProvider->sort->defaultOrder = ['last_modified_time' => 'SORT_DESC'];
+        $dataProvider->sort->defaultOrder = ['name_fi' => SORT_ASC];
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id_event' => $this->id_event,
+        // $query->andFilterWhere([
+            // 'id_event' => $this->id_event,
   
-        ]);
+        // ]);
 
         $query->andFilterWhere(['like', 'name_fi', $this->name_fi])
-            ->andFilterWhere(['like', 'name_fi', $this->name_en])
-            ->andFilterWhere(['like', 'name_fi', $this->name_sv]);
+            ->andFilterWhere(['like', 'name_en', $this->name_en])
+            ->andFilterWhere(['like', 'name_sv', $this->name_sv]);
 
         return $dataProvider;
     }

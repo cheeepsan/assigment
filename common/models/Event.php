@@ -29,7 +29,7 @@ class Event extends ActiveRecord
     {
         return [
             [['id_event_full', 'data_source', 'image', 'alt_labels', 'name_fi', 'name_en', 'name_sv', 'link', 'context', 'type'], 'string'],
-			[['created_time', 'last_modified_time'], 'datetime'],
+			[['created_time', 'last_modified_time'], 'datetime',  'format' => 'yyyy-MM-dd HH:mm:ss'],
             [['id_event'], 'number'], 
             [['aggregate'], 'boolean']
         ];
@@ -78,10 +78,10 @@ class Event extends ActiveRecord
 	public function beforeValidate() {
 		
 		if(parent::beforeValidate()) {
-			$formatter = \Yii::$app->formatter;
-			$formatter->datetimeFormat = 'YYYY-MM-d HH:mm:ss';
+			// $formatter = \Yii::$app->formatter;
+			// $formatter->datetimeFormat = 'YYYY-MM-d HH:mm:ss';
 			
-			$this->last_modified_time = $formatter->asDatetime(date('Y-m-d H:i:s'));
+			// $this->last_modified_time = $formatter->asDatetime(date('Y-m-d H:i:s'));
 			// $this->created_time = $formatter->asDatetime($this->created_time);
 			// var_dump($this->last_modified_time);  die();
 			return true;
