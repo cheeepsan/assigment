@@ -136,11 +136,11 @@ class EventController extends Controller
 				$eventModel->data_source = $event['data_source'];
 				$eventModel->image = $event['image'];
 				
-				$eventModel->alt_labels = json_encode($event['alt_labels']); // This records states as array, so it's easiest to store it as JSON
+				$eventModel->alt_labels = json_encode($event['alt_labels']); // This record is stated as an array, so it's easiest to store it as JSON
 				
 				$nameArr = $event['name'];
 				if (isset($nameArr) && !empty($nameArr)) {
-					$eventModel->name_fi = (isset($nameArr['fi']) ? trim($nameArr['fi']) : "");
+					$eventModel->name_fi = (isset($nameArr['fi']) ? trim($nameArr['fi']) : ""); 
 					$eventModel->name_en = (isset($nameArr['en']) ? trim($nameArr['en']) : "");
 					$eventModel->name_sv = (isset($nameArr['sv']) ? trim($nameArr['sv']) : "");
 				}
@@ -167,9 +167,9 @@ class EventController extends Controller
 	
 	public function actionList() {
 		$searchModel = new EventSearch();
-        $queryParams = Yii::$app->request->queryParams;
+        $queryParams = Yii::$app->request->queryParams; // cath GET params for search and pagination
         
-        $dataProvider = $searchModel->search($queryParams);
+        $dataProvider = $searchModel->search($queryParams); //View common/models/EventSearch for query logic
 
         return $this->render('list', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
 	}
@@ -177,7 +177,7 @@ class EventController extends Controller
 	public function actionUpdate($id) {
 		$model = Event::find()->where(['id' => $id])->one();
 		
-		if($model->load(Yii::$app->request->post()) && $model->validate()){
+		if($model->load(Yii::$app->request->post()) && $model->validate()){ //Catching POST params, populating model and validating model
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', "Updated: $model->id");

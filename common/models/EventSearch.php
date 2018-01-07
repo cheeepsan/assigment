@@ -9,15 +9,17 @@ use yii\base\Model;
 
 
 class EventSearch extends Event {
-
-  public $created_time;
-  public $last_modified_time;
-  public $name_fi;
-  public $name_en;
-  public $name_sv;
-  public $id_event;
+	
+	// attributes that will be used in search 
+	
+	public $created_time;
+	public $last_modified_time;
+	public $name_fi;
+	public $name_en;
+	public $name_sv;
+	public $id_event;
   
-      public function rules()
+    public function rules()
     {
         return [
             [['name_fi', 'name_en', 'name_sv'], 'string'],

@@ -75,19 +75,4 @@ class Event extends ActiveRecord
         return $this->auth_key;
     }
 	
-	public function beforeValidate() {
-		
-		if(parent::beforeValidate()) {
-			// $formatter = \Yii::$app->formatter;
-			// $formatter->datetimeFormat = 'YYYY-MM-d HH:mm:ss';
-			
-			// $this->last_modified_time = $formatter->asDatetime(date('Y-m-d H:i:s'));
-			// $this->created_time = $formatter->asDatetime($this->created_time);
-			// var_dump($this->last_modified_time);  die();
-			return true;
-		}
-		die();
-		return false;
-
-	}
 }
